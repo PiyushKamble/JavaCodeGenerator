@@ -1,7 +1,7 @@
 JavaCodeGenerator 
 ========
 
-`JavaPoet` is a Java API for generating `.java` source files.
+`JavaCodeGenerator ` is a Java API for generating `.java` source files.
 
 Source file generation can be useful when doing things such as annotation processing or interacting
 with metadata files (e.g., database schemas, protocol formats). By generating code, you eliminate
@@ -11,24 +11,21 @@ the need to write boilerplate while also keeping a single source of truth for th
 Deprecated
 ----------
 
-As of 2020-10-10, Square's JavaPoet project is deprecated. We're proud of our work but we haven't
+As of 2020-10-10, Square's JavaCodeGenerator project is deprecated. We're proud of our work but we haven't
 kept up on maintaining it.
-
-If you'd like an alternative that supports the latest Java language features, one option is
-[Palantir's JavaPoet](https://github.com/palantir/javapoet).
 
 To switch to that project, you'll need new Maven coordinates:
 
 ```diff
-- javapoet = { module = "com.squareup:javapoet", version = "1.13.0" }
-+ javapoet = { module = "com.palantir.javapoet:javapoet", version = "0.5.0" }
+- JavaCodeGenerator  = { module = "com.squareup:JavaCodeGenerator ", version = "1.13.0" }
++ JavaCodeGenerator  = { module = "com.palantir.JavaCodeGenerator :JavaCodeGenerator ", version = "0.5.0" }
 ```
 
 And new imports:
 
 ```
 sed -i "" \
-  's/com.squareup.javapoet.\([A-Za-z]*\)/com.palantir.javapoet.\1/g' \
+  's/com.squareup.JavaCodeGenerator .\([A-Za-z]*\)/com.palantir.JavaCodeGenerator .\1/g' \
   `find . -name "*.kt" -or -name "*.java"`
 ```
 
@@ -48,19 +45,19 @@ package com.example.helloworld;
 
 public final class HelloWorld {
   public static void main(String[] args) {
-    System.out.println("Hello, JavaPoet!");
+    System.out.println("Hello, JavaCodeGenerator !");
   }
 }
 ```
 
-And this is the (exciting) code to generate it with JavaPoet:
+And this is the (exciting) code to generate it with JavaCodeGenerator :
 
 ```java
 MethodSpec main = MethodSpec.methodBuilder("main")
     .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
     .returns(void.class)
     .addParameter(String[].class, "args")
-    .addStatement("$T.out.println($S)", System.class, "Hello, JavaPoet!")
+    .addStatement("$T.out.println($S)", System.class, "Hello, JavaCodeGenerator !")
     .build();
 
 TypeSpec helloWorld = TypeSpec.classBuilder("HelloWorld")
@@ -81,17 +78,17 @@ that to a `HelloWorld.java` file.
 In this case we write the file to `System.out`, but we could also get it as a string
 (`JavaFile.toString()`) or write it to the file system (`JavaFile.writeTo()`).
 
-The [Javadoc][javadoc] catalogs the complete JavaPoet API, which we explore below.
+The [Javadoc][javadoc] catalogs the complete JavaCodeGenerator  API, which we explore below.
 
 ### Code & Control Flow
 
-Most of JavaPoet's API uses plain old immutable Java objects. There's also builders, method chaining
-and varargs to make the API friendly. JavaPoet offers models for classes & interfaces (`TypeSpec`),
+Most of JavaCodeGenerator 's API uses plain old immutable Java objects. There's also builders, method chaining
+and varargs to make the API friendly. JavaCodeGenerator  offers models for classes & interfaces (`TypeSpec`),
 fields (`FieldSpec`), methods & constructors (`MethodSpec`), parameters (`ParameterSpec`) and
 annotations (`AnnotationSpec`).
 
 But the _body_ of methods and constructors is not modeled. There's no expression class, no
-statement class or syntax tree nodes. Instead, JavaPoet uses strings for code blocks:
+statement class or syntax tree nodes. Instead, JavaCodeGenerator  uses strings for code blocks:
 
 ```java
 MethodSpec main = MethodSpec.methodBuilder("main")
@@ -114,7 +111,7 @@ void main() {
 }
 ```
 
-The manual semicolons, line wrapping, and indentation are tedious and so JavaPoet offers APIs to
+The manual semicolons, line wrapping, and indentation are tedious and so JavaCodeGenerator  offers APIs to
 make it easier. There's `addStatement()` which takes care of semicolons and newline, and
 `beginControlFlow()` + `endControlFlow()` which are used together for braces, newlines, and
 indentation:
@@ -156,7 +153,7 @@ int multiply10to20() {
 }
 ```
 
-Methods generating methods! And since JavaPoet generates source instead of bytecode, you can
+Methods generating methods! And since JavaCodeGenerator  generates source instead of bytecode, you can
 read through it to make sure it's right.
 
 Some control flow statements, such as `if/else`, can have unlimited control flow possibilities.
@@ -217,7 +214,7 @@ void main() {
 ### $L for Literals
 
 The string-concatenation in calls to `beginControlFlow()` and `addStatement` is distracting. Too
-many operators. To address this, JavaPoet offers a syntax inspired-by but incompatible-with
+many operators. To address this, JavaCodeGenerator  offers a syntax inspired-by but incompatible-with
 [`String.format()`][formatter]. It accepts **`$L`** to emit a **literal** value in the output. This
 works just like `Formatter`'s `%s`:
 
@@ -235,7 +232,7 @@ private MethodSpec computeRange(String name, int from, int to, String op) {
 ```
 
 Literals are emitted directly to the output code with no escaping. Arguments for literals may be
-strings, primitives, and a few JavaPoet types described below.
+strings, primitives, and a few JavaCodeGenerator  types described below.
 
 ### $S for Strings
 
@@ -286,7 +283,7 @@ public final class HelloWorld {
 
 ### $T for Types
 
-We Java programmers love our types: they make our code easier to understand. And JavaPoet is on
+We Java programmers love our types: they make our code easier to understand. And JavaCodeGenerator  is on
 board. It has rich built-in support for types, including automatic generation of `import`
 statements. Just use **`$T`** to reference **types**:
 
@@ -348,9 +345,9 @@ public final class HelloWorld {
 }
 ```
 
-The `ClassName` type is very important, and you'll need it frequently when you're using JavaPoet.
+The `ClassName` type is very important, and you'll need it frequently when you're using JavaCodeGenerator .
 It can identify any _declared_ class. Declared types are just the beginning of Java's rich type
-system: we also have arrays, parameterized types, wildcard types, and type variables. JavaPoet has
+system: we also have arrays, parameterized types, wildcard types, and type variables. JavaCodeGenerator  has
 classes for building each of these:
 
 ```java
@@ -369,7 +366,7 @@ MethodSpec beyond = MethodSpec.methodBuilder("beyond")
     .build();
 ```
 
-JavaPoet will decompose each type and import its components where possible.
+JavaCodeGenerator  will decompose each type and import its components where possible.
 
 ```java
 package com.example.helloworld;
@@ -391,7 +388,7 @@ public final class HelloWorld {
 
 #### Import static
 
-JavaPoet supports `import static`. It does it via explicitly collecting type member names. Let's
+JavaCodeGenerator  supports `import static`. It does it via explicitly collecting type member names. Let's
 enhance the previous example with some static sugar:
 
 ```java
@@ -419,7 +416,7 @@ JavaFile.builder("com.example.helloworld", hello)
     .build();
 ```
 
-JavaPoet will first add your `import static` block to the file as configured, match and mangle
+JavaCodeGenerator  will first add your `import static` block to the file as configured, match and mangle
 all calls accordingly and also import all other types as needed.
 
 ```java
@@ -543,7 +540,7 @@ public abstract class HelloWorld {
 }
 ```
 
-The other modifiers work where permitted. Note that when specifying modifiers, JavaPoet uses
+The other modifiers work where permitted. Note that when specifying modifiers, JavaCodeGenerator  uses
 [`javax.lang.model.element.Modifier`][modifier], a class that is not available on Android. This
 limitation applies to code-generating-code only; the output code runs everywhere: JVMs, Android,
 and GWT.
@@ -581,7 +578,7 @@ public class HelloWorld {
 }
 ```
 
-For the most part, constructors work just like methods. When emitting code, JavaPoet will place
+For the most part, constructors work just like methods. When emitting code, JavaCodeGenerator  will place
 constructors before methods in the output file.
 
 ### Parameters
@@ -655,7 +652,7 @@ private final String android = "Lollipop v." + 5.0;
 
 ### Interfaces
 
-JavaPoet has no trouble with interfaces. Note that interface methods must always be `PUBLIC
+JavaCodeGenerator  has no trouble with interfaces. Note that interface methods must always be `PUBLIC
 ABSTRACT` and interface fields must always be `PUBLIC STATIC FINAL`. These modifiers are necessary
 when defining the interface:
 
@@ -798,7 +795,7 @@ void sortByLength(List<String> strings) {
 
 One particularly tricky part of defining anonymous inner classes is the arguments to the superclass
 constructor. In the above code we're passing the empty string for no arguments:
-`TypeSpec.anonymousClassBuilder("")`. To pass different parameters use JavaPoet's code block
+`TypeSpec.anonymousClassBuilder("")`. To pass different parameters use JavaCodeGenerator 's code block
 syntax with commas to separate arguments.
 
 
@@ -922,13 +919,13 @@ Download [the latest .jar][dl] or depend via Maven:
 ```xml
 <dependency>
   <groupId>com.squareup</groupId>
-  <artifactId>javapoet</artifactId>
+  <artifactId>JavaCodeGenerator </artifactId>
   <version>1.13.0</version>
 </dependency>
 ```
 or Gradle:
 ```groovy
-compile 'com.squareup:javapoet:1.13.0'
+compile 'com.squareup:JavaCodeGenerator :1.13.0'
 ```
 
 Snapshots of the development version are available in [Sonatype's `snapshots` repository][snap].
@@ -957,18 +954,18 @@ License
 JavaWriter
 ==========
 
-JavaPoet is the successor to [JavaWriter][javawriter]. New projects should prefer JavaPoet because
-it has a stronger code model: it understands types and can manage imports automatically. JavaPoet is
+JavaCodeGenerator  is the successor to [JavaWriter][javawriter]. New projects should prefer JavaCodeGenerator  because
+it has a stronger code model: it understands types and can manage imports automatically. JavaCodeGenerator  is
 also better suited to composition: rather than streaming the contents of a `.java` file
 top-to-bottom in a single pass, a file can be assembled as a tree of declarations.
 
 JavaWriter continues to be available in [GitHub][javawriter] and [Maven Central][javawriter_maven].
 
 
- [dl]: https://search.maven.org/remote_content?g=com.squareup&a=javapoet&v=LATEST
- [snap]: https://oss.sonatype.org/content/repositories/snapshots/com/squareup/javapoet/
- [javadoc]: https://square.github.io/javapoet/1.x/javapoet/
- [javawriter]: https://github.com/square/javapoet/tree/javawriter_2
+ [dl]: https://search.maven.org/remote_content?g=com.squareup&a=JavaCodeGenerator &v=LATEST
+ [snap]: https://oss.sonatype.org/content/repositories/snapshots/com/squareup/JavaCodeGenerator /
+ [javadoc]: https://square.github.io/JavaCodeGenerator /1.x/JavaCodeGenerator /
+ [javawriter]: https://github.com/square/JavaCodeGenerator /tree/javawriter_2
  [javawriter_maven]: https://search.maven.org/#artifactdetails%7Ccom.squareup%7Cjavawriter%7C2.5.1%7Cjar
  [formatter]: https://developer.android.com/reference/java/util/Formatter.html
  [modifier]: https://docs.oracle.com/javase/8/docs/api/javax/lang/model/element/Modifier.html
