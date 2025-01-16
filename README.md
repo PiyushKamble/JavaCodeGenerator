@@ -951,21 +951,3 @@ License
 
 
 
-JavaWriter
-==========
-
-JavaCodeGenerator  is the successor to [JavaWriter][javawriter]. New projects should prefer JavaCodeGenerator  because
-it has a stronger code model: it understands types and can manage imports automatically. JavaCodeGenerator  is
-also better suited to composition: rather than streaming the contents of a `.java` file
-top-to-bottom in a single pass, a file can be assembled as a tree of declarations.
-
-JavaWriter continues to be available in [GitHub][javawriter] and [Maven Central][javawriter_maven].
-
-
- [dl]: https://search.maven.org/remote_content?g=com.squareup&a=JavaCodeGenerator &v=LATEST
- [snap]: https://oss.sonatype.org/content/repositories/snapshots/com/squareup/JavaCodeGenerator /
- [javadoc]: https://square.github.io/JavaCodeGenerator /1.x/JavaCodeGenerator /
- [javawriter]: https://github.com/square/JavaCodeGenerator /tree/javawriter_2
- [javawriter_maven]: https://search.maven.org/#artifactdetails%7Ccom.squareup%7Cjavawriter%7C2.5.1%7Cjar
- [formatter]: https://developer.android.com/reference/java/util/Formatter.html
- [modifier]: https://docs.oracle.com/javase/8/docs/api/javax/lang/model/element/Modifier.html
